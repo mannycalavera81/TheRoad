@@ -1,16 +1,29 @@
 # /game/0_init.rpy
 # Variabili globali e default
-
-default persistent.debug_mode = True
+default persistent.debug_mode = False   # DEBUG OFF di default
 
 default metronome_bpm = 120
 default metronome_running = False
 default active_routine = None
 
-define e = Character("Eileen", color="#f44")
+default persistent.warmup_completed = False
 
-init python:
-    def reset_to_debug():
-        renpy.scene()  # Pulisce sfondi/personaggi (layer master)
-        renpy.hide_screen("*")  # Nasconde TUTTE le screen
-        renpy.show_screen("debug_menu_screen")  # Mostra solo il menu
+define e = Character("Eileen", color="#f44")
+define m = Character("Mina", color="#4d0653")
+define l = Character("Lea", color="#fa0ac6")
+define y = Character("You", color="#120afa")
+
+
+default player_name = "Hero"
+default player_level = 5
+default player_hp = 75
+default player_energy = 60
+default player_strength = 15
+default player_intelligence = 12
+default player_charisma = 10
+default player_money = 1250
+default player_fuel = 0  # Valore da -10 a +10
+
+image bg_pub = "images/bg/pub.jpg"
+
+

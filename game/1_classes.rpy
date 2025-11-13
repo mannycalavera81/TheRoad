@@ -85,3 +85,23 @@ init python:
             current_time = time.time()
             elapsed_total = current_time - self.routine_start_time
             return max(0, self.total_duration - elapsed_total)
+
+    class Routine:
+        def __init__(self, name, exercises):
+            self.name = name
+            self.exercises = exercises
+            self.current = 0
+            self.is_running = False
+
+        def start(self):
+            self.current = 0
+            self.is_running = True
+
+        def next(self):
+            if self.current < len(self.exercises):
+                ex = self.exercises[self.current]
+                self.current += 1
+                return ex
+            else:
+                self.is_running = False
+                return None

@@ -1,7 +1,21 @@
 # /game/2_utils.rpy
 # Funzioni di utilità
 
+
 init python:
+
+
+    import pygame
+    import math
+    import io
+    import threading
+    import time
+
+    def reset_to_debug():
+        renpy.scene()  # Pulisce sfondi/personaggi (layer master)
+        renpy.hide_screen("*")  # Nasconde TUTTE le screen
+        renpy.show_screen("debug_menu_screen")  # Mostra solo il menu
+    
     def show_debug_menu():
         renpy.show_screen("debug_menu_screen")
         
@@ -15,11 +29,7 @@ init python:
                 i += 1
             else:
                 break
-        return frames
-
-    # Caricamento frame
-    frame_images = load_frames("images/frames/", extension=".gif")
-    frame_images_warmup = load_frames("images/warmup/", extension=".png")
+        return frames    
 
     # Thread audio
     def audio_loop():
@@ -47,3 +57,9 @@ init python:
         store.metronome_running = False
         for anim in [metronome_animator, warmup_animator]:
             anim.current_frame = 0
+
+
+
+
+ 
+    

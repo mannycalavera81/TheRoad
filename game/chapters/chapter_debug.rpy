@@ -1,15 +1,19 @@
+label debug_menu:
+    call screen debug_menu_screen
+
 label metronome_main:
+    hide screen debug_menu_screen
     scene bg room
     show eileen happy
+    e "Metronomo base! Premi il tasto avvia quando sei pronto"
     show screen metronome_screen
-    e "Metronomo base!"
+   
     menu:
         "Torna al debug":
             hide screen metronome_screen
-            return  # Torna a call screen → LOOP!
-        "Vai GIF":
-            hide screen metronome_screen
-            jump page2a
+            jump debug_menu
+        "Ripeti":
+            jump metronome_main
     return
 
 label page2a:
@@ -19,10 +23,9 @@ label page2a:
     menu:
         "Torna al debug":
             hide screen gif_control_screen_a
-            return
-        "Metronomo":
-            hide screen gif_control_screen_a
-            jump metronome_main
+            jump debug_menu
+        "Ripeti":
+            jump page2a
     return
 
 label routine_warmup_page:
@@ -39,16 +42,27 @@ label routine_warmup_page:
     "Completata!"
     menu:
         "Torna al debug":
-            return
+            jump debug_menu
         "Ripeti":
             jump routine_warmup_page
     return
 
 label routine_intense_page:
     # Stesso di sopra...
+    $ active_routine = routine_intense
+    $ routine_intense.start()
+    $ start_metronome()
+    scene bg room
+    show screen routine_screen(routine_intense, "Intense")
+    e "Intense!"
+    while routine_intense.is_running:
+        pause 0.1
+    $ stop_metronome()
+    hide screen routine_screen
+    "Completata!"
     menu:
         "Torna al debug":
-            return
+            jump debug_menu
         "Ripeti":
             jump routine_intense_page
     return

@@ -8,3 +8,13 @@ init python:
     routine_intense = ProgrammedRoutine([
         (5, 100), (10, 140), (15, 180), (10, 140), (5, 100)
     ])
+
+
+
+# ROUTINE WARM UP
+define routine_warmup_fitness = Routine("Warm Up", [
+    ("Jumping Jacks", 30),
+    ("Arm Circles", 20),
+    ("Leg Swings", 20),
+    ("Torso Twists", 20)
+])

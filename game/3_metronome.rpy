@@ -2,6 +2,10 @@
 # Metronomo base + displayable
 
 init python:
+    # Caricamento frame
+    frame_images = load_frames("images/frames/", extension=".gif")
+    frame_images_warmup = load_frames("images/warmup/", extension=".png")
+    
     metronome_animator = MetronomeAnimator(frame_images)
     warmup_animator = MetronomeAnimator(frame_images_warmup)
 
