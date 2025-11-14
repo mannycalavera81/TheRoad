@@ -4,6 +4,22 @@
 init python:
     import threading
     import time
+    import random
+
+    class DiceRoller:
+        def __init__(self):
+            self.last_result = 0
+            self.is_rolling = False
+        
+        def roll(self, sides=6):
+            """Lancia un dado con N facce (default 6)"""
+            self.last_result = random.randint(1, sides)
+            return self.last_result
+        
+        def start_roll(self, sides=6):
+            """Inizia l'animazione del lancio"""
+            self.is_rolling = True
+            self.roll(sides)
 
     class MetronomeAnimator:
         def __init__(self, frames_list):

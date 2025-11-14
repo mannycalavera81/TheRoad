@@ -11,6 +11,8 @@ init python:
     import threading
     import time
 
+   
+
     def reset_to_debug():
         renpy.scene()  # Pulisce sfondi/personaggi (layer master)
         renpy.hide_screen("*")  # Nasconde TUTTE le screen
@@ -58,6 +60,24 @@ init python:
         for anim in [metronome_animator, warmup_animator]:
             anim.current_frame = 0
 
+
+
+
+## ===== FUNZIONI UTILITY =====
+
+init python:
+    def quick_roll(sides=6):
+        """Lancia un dado e ritorna il risultato senza UI"""
+        return dice.roll(sides)
+    
+    def roll_multiple(num_dice=2, sides=6):
+        """Lancia più dadi"""
+        results = [random.randint(1, sides) for _ in range(num_dice)]
+        return results
+    
+    def roll_with_modifier(sides=6, modifier=0):
+        """Lancia un dado con modificatore"""
+        return dice.roll(sides) + modifier
 
 
 
