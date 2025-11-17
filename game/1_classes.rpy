@@ -102,6 +102,10 @@ init python:
             elapsed_total = current_time - self.routine_start_time
             return max(0, self.total_duration - elapsed_total)
 
+        def get_initial_total_time(self):
+            """Restituisce la durata totale iniziale della routine"""
+            return sum(seg[0] for seg in self.segments)
+
     class Routine:
         def __init__(self, name, exercises):
             self.name = name

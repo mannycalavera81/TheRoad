@@ -2,28 +2,51 @@
 # CAPITOLO 1: INTRO + METRONOMO + ROUTINE
 
 label chapter_01:
-    scene bg pub with fade
-   
+    scene bg pub with fade  
 
     "It's Friday night. You're at the bar on the far side of town."
     "Things haven't exactly been going great, and after the week you just had, you need a drink."
     "All the regular bars by you are overflowing with assholes lately and you just want a quiet place to get away for a little bit and maybe find someone to talk to that isn't a total mess."
     
-    show mina normal at right
-    m "Benvenuto nel Capitolo 1."
-    "As you sip your drink, a blue-haired girl approaches you smiling and says:"
+    "You were drinking..."
+    menu:
+        "... a juice...":
+            $ drink= "juice"
+            $ player_sissy+=1
+        "... a beer...":
+            $ drink= "beer"
+            $ player_slut+=1
+        "... a whiskey...":
+            $ drink= "whiskey"
+            $ player_alpha+=1
+        "...random choise....":
+            # Mostra l'interfaccia del dado
+            call screen dice_roller_gif(6)
+            # Usa il risultato
+            if dice.last_result < 3:
+                $ drink= "juice"
+                $ player_sissy+=1
+            elif dice.last_result < 5:
+                $ drink= "beer"
+                $ player_slut+=1
+            elif dice.last_result < 7:
+                $ drink= "whiskey"
+                $ player_alfa+=1             
+    show mina hello at right
+    "As you sip your [drink], a blue-haired girl approaches you smiling and says:"
     m "Hey there stranger!"
     m "You're not from around here, are you?"
     m "I feel like I would have noticed you before."
-
     "She has an amazingly tight body and she sits as if she wants you to notice it."
     "It's been way too long since you've had any kind of attention from the fairer sex, so getting chatted up by a hottie like her is more than welcome."
-
-    l "Oggi iniziamo con il riscaldamento guidato dal metronomo."
     hide mina
-
     scene bg girlatthebar with fade
-    e "Pronta?"
+    "She's amazingly fun to talk to and keeps openly flirting with you."
+    "She keeps paying for the drinks too; something about not needing to worry about money, which suits you just fine, nearly broke as you are"
+
+    scene bg 02
+    m "Are u ready?"
+
 
     menu:
         "Sì, andiamo!":

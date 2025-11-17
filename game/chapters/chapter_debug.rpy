@@ -2,6 +2,35 @@ label debug_menu:
     call screen debug_menu_screen
 
 label metronome_main:
+    "Che tipo di suono vuoi durante l'esercizio?"
+    menu:        
+        
+        "Nessun suono":
+            $ metronome_audio_mode = "off"
+            
+        "Metronomo classico (ogni battito)":
+            $ metronome_audio_mode = "beat"
+            
+        "Loop continuo - Base":
+            $ metronome_audio_mode = "loop"
+            $ loop_sound_index = 1
+            
+        "Loop continuo - Ambient":
+            $ metronome_audio_mode = "loop"
+            $ loop_sound_index = 2
+            
+        "Loop continuo - Nature":
+            $ metronome_audio_mode = "loop"
+            $ loop_sound_index = 3
+            
+        "Suono naturale - Wow (ogni battito)":
+            $ metronome_audio_mode = "natural"
+            $ natural_sound_index = 1
+            
+        "Suono naturale - Bau (ogni battito)":
+            $ metronome_audio_mode = "natural"
+            $ natural_sound_index = 4
+
     hide screen debug_menu_screen
     scene bg room
     show eileen happy
@@ -31,6 +60,9 @@ label page2a:
 label routine_warmup_page:
     $ active_routine = routine_warmup
     $ routine_warmup.start()
+    $ metronome_audio_mode = "beat"
+    #$ metronome_audio_mode = "natural"
+    $ natural_sound_index = 1  # wow.mp3
     $ start_metronome()
     scene bg room
     show screen routine_screen(routine_warmup, "Warm Up")
@@ -51,18 +83,98 @@ label routine_intense_page:
     # Stesso di sopra...
     $ active_routine = routine_intense
     $ routine_intense.start()
+    $ metronome_audio_mode = "beat"
+    #$ natural_sound_index = 1  # wow.mp3
     $ start_metronome()
     scene bg room
-    show screen routine_screen(routine_intense, "Intense")
-    e "Intense!"
+    show screen routine_screen_with_clock(routine_intense, "Intense")
+    window hide  # ← NASCONDE la banda nera del dialogo
+    
+    # Ora puoi mettere pause o testo senza mostrare la window
+    # e "Intense!"  ← Commentato o rimosso
     while routine_intense.is_running:
         pause 0.1
     $ stop_metronome()
-    hide screen routine_screen
+    hide screen routine_screen_with_clock
+    window show  # ← RIMOSTRA la dialogue window per il resto
     "Completata!"
     menu:
         "Torna al debug":
             jump debug_menu
         "Ripeti":
             jump routine_intense_page
+    return
+
+label components_showcase:
+
+label .loop:  # ← Punto di ripartenza
+    # Stesso di sopra...
+    menu:
+        "Prova il gauge... ":
+            call gauge_tryout
+            jump .loop  # ← Dopo il return, torna al menu!
+        "Screen della scheda":
+            call card_tryout            
+            jump .loop  # ← Dopo il return, torna al menu!
+        "Screen con cornice":
+            call frame_tryout
+            jump .loop  # ← Dopo il return, torna al menu!
+        "Clock":
+            call clock_tryout            
+            jump .loop  # ← Dopo il return, torna al menu!
+        "Debug menu":
+            jump debug_menu
+
+
+label gauge_tryout:
+    # Stesso di sopra...
+    show screen gauge_display_vertical
+    "Ok!"
+    "Adesso lo porto al max!"
+    $ metronome_bpm = 240
+    "Adesso lo porto al 60!"
+    $ metronome_bpm = 180
+    "Adesso lo porto al 20!"
+    $ metronome_bpm = 80
+    "Adesso lo porto al 0!"
+    $ metronome_bpm = 40
+    hide screen gauge_display_vertical
+    return
+
+
+label card_tryout:
+    #$ routine_warmup_fitness.start()
+    #$ start_metronome()
+    scene bg room
+    window hide
+    show screen fancy_card  
+    "Ti piace ???"
+    window show
+    hide screen fancy_card
+    return
+
+label clock_tryout:
+    $ active_routine = routine_intense
+    $ routine_intense.start()
+    $ metronome_audio_mode = "beat"
+    $ start_metronome()
+    scene bg room
+    show screen routine_screen_with_clock(routine_intense, "Intense")
+    window hide  # ← NASCONDE la banda nera del dialogo
+    
+    # Ora puoi mettere pause o testo senza mostrare la window
+    # e "Intense!"  ← Commentato o rimosso
+    while routine_intense.is_running:
+        pause 0.1
+    $ stop_metronome()
+    "Ti piace ???"
+    window show
+    hide screen routine_screen_with_clock
+    return
+
+label frame_tryout:
+    scene bg room    
+    show screen card_with_shadow
+    "Ti piace ???"
+    hide screen card_with_shadow
     return

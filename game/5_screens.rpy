@@ -1,55 +1,12 @@
 # /game/5_screens.rpy
 # Tutte le screen
 
-screen metronome_screen():
-    #on "show" action Function(start_metronome)
-    on "hide" action Function(stop_metronome)
 
-    vbox xalign 0.5 yalign 0.5 spacing 30:
-        frame background "#222a" xpadding 50 ypadding 50:
-            vbox spacing 20 xalign 0.5:
-                add "metronome_anim" xalign 0.5
-                text "BPM: [metronome_bpm]" xalign 0.5 size 32 color "#fff"
-                if metronome_running:
-                    text "Frame: [metronome_animator.current_frame]/38" size 20 color "#0f0"
-                else:
-                    text "FERMO" size 20 color "#f00"
-                hbox spacing 20 xalign 0.5:
-                    textbutton "−" action SetVariable("metronome_bpm", max(20, metronome_bpm - 5)) text_size 28
-                    textbutton "+" action SetVariable("metronome_bpm", min(240, metronome_bpm + 5)) text_size 28
-        hbox spacing 40 xalign 0.5:
-            textbutton "Avvia" action Function(start_metronome)
-            textbutton "Ferma" action Function(stop_metronome)
 
-screen gif_control_screen_a():
-    on "show" action Function(start_metronome)
-    on "hide" action Function(stop_metronome)
 
-    vbox xalign 0.5 yalign 0.5 spacing 30:
-        frame background "#222a" xpadding 50 ypadding 50:
-            vbox spacing 20 xalign 0.5:
-                add "metronome_anim" xalign 0.5
-                text "BPM: [metronome_bpm]" size 32 color "#fff"
-                text "Velocità: [metronome_bpm/60.0:.2f]x" size 20 color "#aaa"
-                hbox spacing 20 xalign 0.5:
-                    textbutton "−" action SetVariable("metronome_bpm", max(20, metronome_bpm - 5)) text_size 28
-                    textbutton "+" action SetVariable("metronome_bpm", min(240, metronome_bpm + 5)) text_size 28
 
-screen routine_screen(routine, routine_name):
-    vbox xalign 0.5 yalign 0.5 spacing 30:
-        frame background "#222a" xpadding 50 ypadding 50:
-            vbox spacing 20 xalign 0.5:
-                text "[routine_name]" size 36 color "#ff0"
-                add "routine_anim" xalign 0.5
-                text "BPM: [metronome_bpm]" size 32 color "#fff"
-                if routine.is_running:
-                    text "Segmento [routine.current_segment + 1]/[len(routine.segments)]" size 24 color "#0ff"
-                    text "Tempo segmento: [int(routine.get_time_remaining())]s" size 20 color "#0f0"
-                    text "Tempo totale: [int(routine.get_total_time_remaining())]s" size 20 color "#0f0"
-                else:
-                    text "COMPLETATA!" size 28 color "#f00"
-        hbox spacing 40 xalign 0.5:
-            textbutton "Ferma" action [Function(routine.stop), Function(stop_metronome)]
+
+
 
 screen debug_menu_screen():
     # SFONDO NERO COMPLETO (fix "cagare")
@@ -69,28 +26,63 @@ screen debug_menu_screen():
             textbutton "GIF Animata" action Jump("page2a") xalign 0.5
             textbutton "Routine Warm Up" action Jump("routine_warmup_page") xalign 0.5
             textbutton "Routine Intense" action Jump("routine_intense_page") xalign 0.5
+            textbutton "Component Showcase" action Jump("components_showcase") xalign 0.5
             
             null height 40
             textbutton "ESCI DAL DEBUG" action Jump("start") xalign 0.5  # Esce dal loop
 
 
 
-screen routine_screen_fitness(routine, title):
-    frame:
-        xalign 0.5 yalign 0.1
-        background "#000000aa"
-        padding [20, 20, 20, 20]
-        text "[title] - Esercizio [routine.current+1]/[len(routine.exercises)]" size 28 color "#ffcc00"
-
-    if routine.is_running:
-        $ ex = routine.exercises[routine.current]
-        frame:
-            xalign 0.5 yalign 0.5
-            background None
-            text "[ex[0]]" size 40 color "#ffffff"
-            text "[ex[1]] secondi" size 32 color "#00ff00"
 
 
+screen fancy_card:
+    vbox xalign 0.5 yalign 0 spacing 20 :
+        hbox:
+            use gauge_display_vertical
+            frame background "#f10909aa" xpadding 50 ypadding 50 :
+                vbox spacing 20 xalign 0.5:
+                    text "Titolo" size 36 color "#00ff6e"
+                    text "Descrizione dettagliata  della challeng" size 18 color "#ff6a00"
+                    add "routine_anim" xalign 0.5    
+                    text "BPM: [metronome_bpm]" size 32 color "#fff"
+                    text "COMPLETATA!" size 28 color "#f00"
+            text "Sound area" size 14 color "#00ffa6" 
+        hbox spacing 40 xalign 0.5:
+            imagebutton auto "start_%s.png" action Show('save')
+            imagebutton auto "stop_%s.png" action Show('save')
+
+style card_frame:
+    #background Frame("images/frame.png", 40, 40)
+    # Oppure usa un colore con alpha:
+    background Frame(Solid("#990404cc"), 0, 0)  # Nero semi-trasparente
+    padding (50, 40)
+    margin (20, 20)
+    xsize 500
+    ysize 400
+    xalign 0.5
+    yalign 0.5
+
+screen card_with_shadow:
+    zorder 100
+
+    fixed:
+        xsize 640 ysize 720                  # dimensione totale della card
+
+        # Ombra morbida (sotto tutto)
+        add Solid("#00000022") xoffset 18 yoffset 18 xsize 540 ysize 720
+        add Solid("#00000044") xoffset 12 yoffset 12 xsize 540 ysize 720
+        add Solid("#00000099") xoffset  6 yoffset  6 xsize 540 ysize 720
+
+        # Il tuo frame dorato ridimensionato alla perfezione
+        add "images/frame.png" xsize 540 ysize 720
+        # (se vuoi più grande → 0.62, se più piccolo → 0.55)
+
+        # Testo centrato correttamente
+        text "Card con ombra!":
+            size 40
+            color "#ffffff"
+            outlines [(3, "#000000", 0, 0)]   # contorno nero per leggibilità
+            xanchor 1.0                       # centra orizzontalmente rispetto a xpos
 
 screen gauge_display():
     fixed:

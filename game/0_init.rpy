@@ -23,6 +23,10 @@ default player_intelligence = 12
 default player_charisma = 10
 default player_money = 1250
 default player_fuel = 0  # Valore da -10 a +10
+default player_sissy = 0
+default player_slut = 0
+default player_alpha = 0
+
 
 image bg_pub = "images/bg/pub.jpg"
 
