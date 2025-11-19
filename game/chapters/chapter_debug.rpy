@@ -33,13 +33,22 @@ label metronome_main:
 
     hide screen debug_menu_screen
     scene bg room
-    show eileen happy
-    e "Metronomo base! Premi il tasto avvia quando sei pronto"
+    #show eileen happy
+    #e "Metronomo base! Premi il tasto avvia quando sei pronto"
     show screen metronome_screen
-   
+    window hide  # ← NASCONDE la banda nera del dialogo
+    
+    pause 5.0
+    while metronome_running:
+        pause 0.1
+
+    window show  # ← RIMOSTRA la dialogue window per il resto
+    "Completata!"
+    hide screen metronome_screen
+
     menu:
         "Torna al debug":
-            hide screen metronome_screen
+            
             jump debug_menu
         "Ripeti":
             jump metronome_main
@@ -66,11 +75,13 @@ label routine_warmup_page:
     $ start_metronome()
     scene bg room
     show screen routine_screen(routine_warmup, "Warm Up")
-    e "Warm Up!"
+    window hide  # ← NASCONDE la banda nera del dialogo
+    
     while routine_warmup.is_running:
         pause 0.1
     $ stop_metronome()
     hide screen routine_screen
+    window show  # ← RIMOSTRA la dialogue window per il resto
     "Completata!"
     menu:
         "Torna al debug":
@@ -113,6 +124,9 @@ label .loop:  # ← Punto di ripartenza
         "Prova il gauge... ":
             call gauge_tryout
             jump .loop  # ← Dopo il return, torna al menu!
+        "...e il countdown clock... ":
+            call countdown_tryout
+            jump .loop  # ← Dopo il return, torna al menu!
         "Screen della scheda":
             call card_tryout            
             jump .loop  # ← Dopo il return, torna al menu!
@@ -128,7 +142,7 @@ label .loop:  # ← Punto di ripartenza
 
 label gauge_tryout:
     # Stesso di sopra...
-    show screen gauge_display_vertical
+    show screen gauge_display_horizontal
     "Ok!"
     "Adesso lo porto al max!"
     $ metronome_bpm = 240
@@ -138,7 +152,25 @@ label gauge_tryout:
     $ metronome_bpm = 80
     "Adesso lo porto al 0!"
     $ metronome_bpm = 40
-    hide screen gauge_display_vertical
+    hide screen gauge_display_horizontal
+    return
+
+
+
+label countdown_tryout:
+    $ active_routine = routine_intense
+    $ routine_intense.start()
+    # Stesso di sopra...
+    $ metronome_audio_mode = "beat"
+    #$ natural_sound_index = 1  # wow.mp3
+    $ start_metronome()
+    show screen countdown_display(routine_intense, "Intense")
+    while routine_intense.is_running:
+        pause 0.1
+    $ stop_metronome()
+    "Ok!"
+    "Adesso lo porto al max!"
+    hide screen countdown_display
     return
 
 
@@ -173,8 +205,6 @@ label clock_tryout:
     return
 
 label frame_tryout:
-    scene bg room    
-    show screen card_with_shadow
-    "Ti piace ???"
-    hide screen card_with_shadow
+    window hide
+    show screen ultimate_card
     return

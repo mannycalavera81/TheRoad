@@ -11,12 +11,12 @@ image routine_anim = DynamicDisplayable(routine_displayable)
 
 # 3. ASSETS (immagini/video)
 
-# 4. TRANSFORMS/ANIMAZIONI
+# 4. TRANSFORMS/add
 
 # 5. SCREENS
 
 screen metronome_screen():
-    #on "show" action Function(start_metronome)
+    on "show" action Function(start_metronome)
     on "hide" action Function(stop_metronome)
 
     vbox xalign 0.5 yalign 0.5 spacing 30:
@@ -40,8 +40,10 @@ screen metronome_screen():
                     textbutton "Loop Sound" action Function(change_audio_mode, "loop", 2) text_size 28
                     textbutton "Loop Sound" action Function(change_audio_mode, "loop", 3) text_size 28
         hbox spacing 40 xalign 0.5:
-            textbutton "Avvia" action Function(start_metronome)
-            textbutton "Ferma" action Function(stop_metronome)
+            imagebutton auto "start_%s.png"  action [  SensitiveIf( not metronome_running ) ,Function(start_metronome)]
+            imagebutton auto "stop_%s.png" action [ SensitiveIf( metronome_running ), Function(stop_metronome)]
+            #textbutton "Avvia" action Function(start_metronome)
+            #textbutton "Ferma" action Function(stop_metronome)
 
 
 
@@ -82,6 +84,26 @@ screen routine_screen(routine, routine_name):
 
 
 
+screen countdown_display(routine, routine_name):
+    $ time_left = int(routine.get_total_time_remaining()) if routine.is_running else 0
+    $ total_time = routine.get_initial_total_time()  # ← USA IL TEMPO TOTALE INIZIALE
+    fixed:
+        xysize (160, 160)  # Riduco anche il fixed
+        add Solid("#0008ff", xysize=(160, 160))
+        
+        add Transform("images/gauge/clock-full.png") xalign 0 ypos 0
+        if time_left < 40:
+            add Transform("images/gauge/clock-q1.png" ) xalign 0 ypos 0
+        if time_left < 30:
+            add Transform("images/gauge/clock-q2.png" ) xalign 0 ypos 0
+        if time_left < 10:
+            add Transform("images/gauge/clock-q3.png" ) xalign 0 ypos 0
+        if time_left < 1:
+            add Transform("images/gauge/clock-empty.png" ) xalign 0 ypos 0
+
+        text "Time left [time_left]" size 14 color "#ffffff" xalign 0.5 yalign 0.5 bold True
+
+
 screen routine_screen_with_clock(routine, routine_name):
     $ time_left = int(routine.get_total_time_remaining()) if routine.is_running else 0
     $ total_time = routine.get_initial_total_time()  # ← USA IL TEMPO TOTALE INIZIALE
@@ -92,26 +114,28 @@ screen routine_screen_with_clock(routine, routine_name):
         frame background "#222a" xpadding 50 ypadding 50:
             vbox spacing 20 xalign 0.5:
                 text "[routine_name]" size 36 color "#ff0"
-                
-                # COUNTDOWN CIRCOLARE
-                fixed xysize (200, 200) xalign 0.5:
-                    # Cerchio di sfondo (grigio)
-                    add Solid("#333333", xysize=(180, 180)) at transform:
-                        xalign 0.5
-                        yalign 0.5
-                        corner1 (0.5, 0.5)
-                        corner2 (0.5, 0.5)
-                        rotate 0
-                    
-                    # Cerchio progressivo (colorato)
-                    add Solid(color, xysize=(180, 180)) at transform:
-                        xalign 0.5
-                        yalign 0.5
-                        rotate rotation
-                        crop (0, 0, 180, 180)
-                    
-                    # Numero centrale
-                    text "[time_left]" size 72 color "#ffffff" xalign 0.5 yalign 0.5 bold True
+                hbox:
+                    use gauge_display_vertical
+                    add "routine_anim"
+                    # COUNTDOWN CIRCOLARE
+                    fixed xysize (200, 200) xalign 0.5:
+                        # Cerchio di sfondo (grigio)
+                        add Solid("#333333", xysize=(180, 180)) at transform:
+                            xalign 0.5
+                            yalign 0.5
+                            corner1 (0.5, 0.5)
+                            corner2 (0.5, 0.5)
+                            rotate 0
+                        
+                        # Cerchio progressivo (colorato)
+                        add Solid(color, xysize=(180, 180)) at transform:
+                            xalign 0.5
+                            yalign 0.5
+                            rotate rotation
+                            crop (0, 0, 180, 180)
+                        
+                        # Numero centrale
+                        text "[time_left]" size 72 color "#ffffff" xalign 0.5 yalign 0.5 bold True
                 
                 text "BPM: [metronome_bpm]" size 32 color "#fff"
                 if routine.is_running:

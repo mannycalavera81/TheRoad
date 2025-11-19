@@ -32,7 +32,110 @@ screen debug_menu_screen():
             textbutton "ESCI DAL DEBUG" action Jump("start") xalign 0.5  # Esce dal loop
 
 
+screen progress_bar(current, total, width=540, height=14):
+    ## current = step attuale (es. 3)
+    ## total   = step totali   (es. 6)
+    ## width   = larghezza totale barra (adattala alla tua card)
+    ## height  = altezza (12-18 px è perfetta)
 
+    frame:
+        background None
+        xsize width ysize height
+        xalign 0.5
+
+        # sfondo grigio scuro
+        add Solid("#222222", xsize=width, ysize=height)
+
+        # barra colorata che cresce
+        add Solid("#00ff9d", xsize=(width * current / total), ysize=height)
+
+        # bordo sottile
+        #add Frame("gui/progress_border.png", 2, 2) xsize width ysize height
+
+        # testo centrato sopra (opzionale ma figo)
+        text "[current] / [total]" size 13 color "#ffffff" outlines [(1,"#000000",0,0)]:
+            xalign 0.5 yalign 0.5
+
+#Versione ultra-minimal (solo barra colorata senza testo)
+screen mini_progress(current, total, w=500, h=8):
+    add Solid("#333") xsize w ysize h
+    add Solid("#ff00aa", xsize=(w * current / total), ysize=h)
+
+# Versione con pallini (tipo  ●●●○○○ )
+screen dots_progress(current, total):
+    hbox spacing 6 yalign 0.5 xalign 1.0:
+        for i in range(1, total+1):
+            add Solid("#00ff9d" if i <= current else "#444444", xsize=12, ysize=12, xysize_ymin=12) radius 6
+
+screen circular_countdown(time_left):
+    fixed:
+        xysize (160, 160)  # Riduco anche il fixed
+        add Solid("#0008ff", xysize=(160, 160))
+        
+        add Transform("images/gauge/clock-full.png") xalign 0 ypos 0
+        if time_left < 40:
+            add Transform("images/gauge/clock-q1.png" ) xalign 0 ypos 0
+        if time_left < 30:
+            add Transform("images/gauge/clock-q2.png" ) xalign 0 ypos 0
+        if time_left < 10:
+            add Transform("images/gauge/clock-q3.png" ) xalign 0 ypos 0
+        if time_left < 1:
+            add Transform("images/gauge/clock-empty.png" ) xalign 0 ypos 0
+
+        text "Time left [time_left]" size 14 color "#ffffff" xalign 0.5 yalign 0.5 bold True
+
+screen ultimate_card:
+    modal True
+    frame:    
+        xalign 0.5 yalign 0.1
+        background Frame("card-background.png", 25, 25)
+        #          Frame dice: "30px di bordo su ogni lato!"
+        xsize 607  # Il frame è largo 500px
+        ysize 660  # Il frame è alto 400px
+        padding [25, 25, 25, 25]
+        vbox xsize 556:
+            frame xfill True:
+                style "empty"
+                background "#00ff62"
+                has hbox
+                #vbox:
+                hbox xfill True :
+                    hbox:
+                        add "dildo.png"  xsize 24 ysize 24 
+                        add "dildo.png"  xsize 24 ysize 24
+                    text  "AREA Titolo" bold True size 24 color "#151515" xalign 0.5 
+                    add Solid("#d9169f") xsize 100 ysize 30 xalign 1.0  
+            
+            frame xfill True:
+                style "empty"
+                background "#0008ff" padding (0,0)
+                hbox xfill True: 
+                    add "face_a.png"  xsize 100 ysize 100
+                    text "Descrizione completa . es Lorem ipsum Lorem forgiato est" size 14 xsize 370 color "#fa6712"
+                    add "position6.jpg"  xsize 100 ysize 100 xalign 1.0
+                 
+                    
+            add "metronome_anim" xalign 0.5
+
+            frame xfill True yfill True:
+                style "empty"
+                background "#00d9ff" padding (0,0)
+                hbox xfill True:  
+                   
+                    vbox:
+                        text "Stage 1 di 3" size 14 bold True color "#121afa"                         
+                        text "Descrizione completa dello stage . es Lorem ipsum Lorem forgiato est" :
+                            size 14 color "#fa1212" xsize 370 xalign 0.0
+                    use dots_progress( 3, 6)
+                    # Testo stage centrato
+
+    hbox:
+        use gauge_display_vertical
+        use circular_countdown(10)
+        imagebutton auto "start_%s.png"
+        imagebutton auto "stop_%s.png" 
+                    
+                    
 
 
 screen fancy_card:
@@ -177,136 +280,6 @@ screen stats_sidebar_narrow():
                 text "[player_money]$" style "stats_value_gold"
 
 
-# ==================================================
-# VERSIONE 2: PANNELLO LATERALE LARGO (640px)
-# ==================================================
-
-screen stats_sidebar_wide():
-    tag stats_screen
-    zorder 100
-    
-    frame:
-        xalign 0.0
-        yalign 0.0
-        xsize 640
-        ysize 1080
-        padding (30, 40)
-        background "#2c3e50e6"
-        
-        vbox:
-            spacing 20
-            xfill True
-            
-            text "STATISTICHE PERSONAGGIO" style "stats_title_wide"
-            null height 20
-            
-            frame:
-                background "#34495eaa"
-                padding (20, 15)
-                xfill True
-                
-                vbox:
-                    spacing 10
-                    xfill True
-                    
-                    text "INFORMAZIONI BASE" style "stats_subtitle"
-                    
-                    hbox:
-                        spacing 10
-                        xfill True
-                        text "Nome:" style "stats_label"
-                        text "[player_name]" style "stats_value" xalign 1.0
-                    
-                    hbox:
-                        spacing 10
-                        xfill True
-                        text "Livello:" style "stats_label"
-                        text "[player_level]" style "stats_value" xalign 1.0
-            
-            frame:
-                background "#34495eaa"
-                padding (20, 15)
-                xfill True
-                
-                vbox:
-                    spacing 15
-                    xfill True
-                    
-                    text "STATISTICHE VITALI" style "stats_subtitle"
-                    
-                    vbox:
-                        spacing 8
-                        xfill True
-                        hbox:
-                            spacing 10
-                            xfill True
-                            text "Salute" style "stats_label"
-                            text "[player_hp]/100" style "stats_value" xalign 1.0
-                        bar value player_hp range 100 xsize 550 ysize 25
-                    
-                    vbox:
-                        spacing 8
-                        xfill True
-                        hbox:
-                            spacing 10
-                            xfill True
-                            text "Energia" style "stats_label"
-                            text "[player_energy]/100" style "stats_value" xalign 1.0
-                        bar value player_energy range 100 xsize 550 ysize 25
-            
-            frame:
-                background "#34495eaa"
-                padding (20, 15)
-                xfill True
-                
-                vbox:
-                    spacing 10
-                    xfill True
-                    
-                    text "CARBURANTE" style "stats_subtitle"                    
-                    hbox:
-                        xalign 0.5
-                        use gauge_display
-            
-            frame:
-                background "#34495eaa"
-                padding (20, 15)
-                xfill True
-                
-                vbox:
-                    spacing 10
-                    xfill True
-                    
-                    text "ATTRIBUTI" style "stats_subtitle"
-                    
-                    hbox:
-                        spacing 10
-                        xfill True
-                        text "Forza:" style "stats_label"
-                        text "[player_strength]" style "stats_value" xalign 1.0
-                    
-                    hbox:
-                        spacing 10
-                        xfill True
-                        text "Intelligenza:" style "stats_label"
-                        text "[player_intelligence]" style "stats_value" xalign 1.0
-                    
-                    hbox:
-                        spacing 10
-                        xfill True
-                        text "Carisma:" style "stats_label"
-                        text "[player_charisma]" style "stats_value" xalign 1.0
-            
-            frame:
-                background "#f39c12aa"
-                padding (20, 15)
-                xfill True
-                
-                hbox:
-                    spacing 10
-                    xfill True
-                    text "Denaro:" style "stats_label"
-                    text "[player_money]$" style "stats_value_gold" xalign 1.0
 
 
 # ==================================================
