@@ -116,6 +116,34 @@ label routine_intense_page:
             jump routine_intense_page
     return
 
+
+
+label frame_tryout:
+    $ active_routine = routine_warmup
+    $ routine_warmup.start()
+    $ metronome_audio_mode = "beat"
+    #$ metronome_audio_mode = "natural"
+    $ natural_sound_index = 1  # wow.mp3
+    $ start_metronome()
+    scene bg room
+    show screen pulsantiera(routine_warmup, "Intense")
+    window hide  # ← NASCONDE la banda nera del dialogo
+    
+    while routine_warmup.is_running:
+        pause 0.1
+    $ stop_metronome()
+    hide screen pulsantiera
+    window show  # ← RIMOSTRA la dialogue window per il resto
+    "Completata!"
+    menu:
+        "Torna al debug":
+            jump debug_menu
+        "Ripeti":
+            jump frame_tryout
+    return
+
+
+
 label components_showcase:
 
 label .loop:  # ← Punto di ripartenza
@@ -135,6 +163,9 @@ label .loop:  # ← Punto di ripartenza
             jump .loop  # ← Dopo il return, torna al menu!
         "Clock":
             call clock_tryout            
+            jump .loop  # ← Dopo il return, torna al menu!
+        "ProgressMenu":
+            call progressmenu
             jump .loop  # ← Dopo il return, torna al menu!
         "Debug menu":
             jump debug_menu
@@ -204,7 +235,28 @@ label clock_tryout:
     hide screen routine_screen_with_clock
     return
 
-label frame_tryout:
-    window hide
-    show screen ultimate_card
+
+# Esempio di utilizzo nel gioco
+label progressmenu:
+    # Inizializza le variabili
+    $ magic_points = 123
+    $ max_magic = 210
+    $ health_points = 195
+    $ max_health = 200
+    $ experience_points = -50  # Può essere negativo
+    $ max_experience = 100
+    
+    # Mostra le barre
+    show screen status_bars
+    
+    "Le barre sono ora visibili!"
+    
+    # Modifica i valori
+    $ magic_points = 180
+    $ experience_points = 30
+    
+    "I valori sono cambiati!"
+    
+    hide screen status_bars
+    
     return

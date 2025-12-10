@@ -106,6 +106,29 @@ init python:
             """Restituisce la durata totale iniziale della routine"""
             return sum(seg[0] for seg in self.segments)
 
+    class CardInfo:
+        def __init__(self,name, description,tools,  charapter, stages):
+            self.name=name
+            self.tools=tools
+            self.description=description
+            self.charapter=charapter
+            self.stages=stages
+            self.currentstage=0
+            self.is_showing=False
+
+        def start():            
+            self.current = 0
+            self.is_running = True
+
+        def next(self):
+            if self.current < len(self.stages):
+                stage = self.stages[self.current]
+                self.current += 1
+                return stage
+            else:
+                self.is_running = False
+                return None
+    
     class Routine:
         def __init__(self, name, exercises):
             self.name = name

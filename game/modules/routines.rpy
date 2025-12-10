@@ -18,3 +18,7 @@ define routine_warmup_fitness = Routine("Warm Up", [
     ("Leg Swings", 20),
     ("Torso Twists", 20)
 ])
+
+define card_at_the_bar_01 = CardInfo( "Fun at the toilet" , "She invite you to the bathrom ...you notice that... suddenly you begin to ... and dthen...", "dildobig", "cowgirl" "Mia", [
+    ("Fuck for 1 min at 60 bpm", 1 )
+])

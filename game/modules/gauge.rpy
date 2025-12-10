@@ -45,7 +45,7 @@ screen gauge_display_horizontal():
         add Solid("#502c2d", xysize=(20, 20)) xalign 0.5 ypos 75
         #add Transform("images/gauge/lancetta-orizzontale.png", rotate=(player_fuel * 13.5 ), anchor=(0.5, 0.5)) xalign 0.5 ypos 80
         add "images/gauge/lancetta.png" at gauge_needle_range(metronome_bpm, 40, 240) xalign 0.5 ypos 80
-        text "[metronome_bpm] BPM" size 16 bold True color "#ecf0f1" xpos 90 ypos 70 
+        text "[metronome_bpm] BPM" size 16 bold True color "#ecf0f1" xalign 0.5 yalign 1.0
 
 
 

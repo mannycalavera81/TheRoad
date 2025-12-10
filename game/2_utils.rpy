@@ -176,6 +176,12 @@ init python:
         else:
             return "#ff0000"  # Rosso
 
+    def get_icon_for_level(current, thresholds):
+        """Ritorna l'icona appropriata in base al livello"""
+        for threshold, icon in sorted(thresholds.items(), reverse=True):
+            if current >= threshold:
+                return icon
+        return thresholds[min(thresholds.keys())]
  
 
 
