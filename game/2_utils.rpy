@@ -184,6 +184,18 @@ init python:
         return thresholds[min(thresholds.keys())]
  
 
+    def update_menu_anim():
+        global menu_ypos
+        target = 20 if renpy.store.active_menu != "none" else -400
+
+        # animazione lineare
+        if menu_ypos < target:
+            menu_ypos = min(menu_ypos + 40, target)
+        elif menu_ypos > target:
+            menu_ypos = max(menu_ypos - 40, target)
+
+        renpy.restart_interaction()
+
 
 
  

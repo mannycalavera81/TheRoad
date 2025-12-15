@@ -165,7 +165,7 @@ label .loop:  # ← Punto di ripartenza
             call clock_tryout            
             jump .loop  # ← Dopo il return, torna al menu!
         "ProgressMenu":
-            call progressmenu
+            call persolnalmenu
             jump .loop  # ← Dopo il return, torna al menu!
         "Debug menu":
             jump debug_menu
@@ -236,15 +236,11 @@ label clock_tryout:
     return
 
 
+
 # Esempio di utilizzo nel gioco
-label progressmenu:
+label persolnalmenu:
     # Inizializza le variabili
-    $ magic_points = 123
-    $ max_magic = 210
-    $ health_points = 195
-    $ max_health = 200
-    $ experience_points = -50  # Può essere negativo
-    $ max_experience = 100
+    scene bg girlatthebar
     
     # Mostra le barre
     show screen status_bars
@@ -252,11 +248,27 @@ label progressmenu:
     "Le barre sono ora visibili!"
     
     # Modifica i valori
-    $ magic_points = 180
-    $ experience_points = 30
+    $ player_sissy = 120
+    $ player_slut = 48
+    $ player_alpha = 5
     
     "I valori sono cambiati!"
     
+
+    # Modifica i valori
+    $ player_sissy = 10
+    $ player_slut = 108
+    $ player_alpha = -5
+    
+    "I valori sono cambiati di nuovo !"
+
     hide screen status_bars
     
     return
+
+# Esempio di utilizzo nel gioco
+label progressmenu:
+    show screen top_menus
+    "Prova il menu a comparsa!"
+    "Clicca i tab."
+   

@@ -23,11 +23,26 @@ default player_intelligence = 12
 default player_charisma = 10
 default player_money = 1250
 default player_fuel = 0  # Valore da -10 a +10
+
 default player_sissy = 0
+default player_max_sissy = 200
 default player_slut = 0
+default player_max_slut = 200
 default player_alpha = 0
+default player_max_alpha = 10
+default player_min_alpha = -10
+
+
+
 
 
 image bg_pub = "images/bg/pub.jpg"
+
+
+default active_menu = "none"
+default menu_ypos = -400   # il menu parte fuori dallo schermo
+
+# Velocità animazione
+define MENU_SPEED = 0.25
 
 

@@ -378,61 +378,83 @@ style stats_value_gold:
 # Screen principale con le 3 barre in ORIZZONTALE
 screen status_bars():
     # Barra Rosa (Magic)
+    hbox:
+        xalign 0.5
     
-    use progress_bar(
-        x=20, y=20,
-        current=magic_points, 
-        max_value=max_magic,
-        bar_color="#d946ef",
-        dark_color="#581c87",
-        label="Magic",
-        icon_thresholds={
-            0: "images/icon/fire.png",
-            50: "images/icon/star.png",
-            150: "images/icon/flames.png"
-        }
-    )
-    
+        use progress_bar_slim(
+            color_string="pink",
+            current=player_sissy, 
+            min_value=0, 
+            max_value=player_max_sissy,
+            bar_color="#d946ef",
+            dark_color="#581c87",
+            label="Sissy",
+            icon_thresholds={
+                0: "images/icon/fire.png",
+                50: "images/icon/star.png",
+                150: "images/icon/flames.png"
+            }
+        )
+        
+        # Barra Blu (Experience - può essere negativa)
+        #use progress_bar_centered(
+        #    x=700, y=10,
+        #    current=experience_points, 
+        #    max_value=max_experience,
+        #    bar_color="#3b82f6",
+        #    dark_color="#1e3a8a",
+        #    label="Experience"
+        #)
+
+
+        # Barra Rossa (Health)
+        use progress_bar_slim(
+            color_string="red",
+            current=player_slut,
+            min_value=0, 
+            max_value=player_max_slut,
+            bar_color="#ef4444",
+            dark_color="#7f1d1d",
+            label="Slut",
+            icon_thresholds={
+                0: "images/icon/heart.png",
+                100: "images/icon/heartblack.png"
+            }
+        )
+
+
+            # Barra Rossa (experience)
+        use progress_bar_slim(
+            color_string="blue",
+            current=player_alpha, 
+            min_value=player_min_alpha,
+            max_value=player_max_alpha,
+            bar_color="#3b82f6",
+            dark_color="#1e3a8a",
+            label="Alpha",
+            icon_thresholds={
+                0: "images/icon/beta.png",
+                1: "images/icon/alpha.png"
+            }
+        )
+
     # Barra Blu (Experience - può essere negativa)
-    use progress_bar_centered(
-        x=20, y=220,
-        current=experience_points, 
-        max_value=max_experience,
-        bar_color="#3b82f6",
-        dark_color="#1e3a8a",
-        label="Experience"
-    )
+    #use progress_bar_icon(
+    #    x=10, y=300,
+    #    current=experience_points, 
+    #    max_value=max_experience,
+    #    bar_color="#eeff00",
+    #    dark_color="#768a1e9c",
+    #    label="Realation"
+    #)
+
+    #use money_bar(
+    #    x=1400 , y=10,
+    #    label="Money",
+    #    value="1235"
+    #)
 
 
-    # Barra Rossa (Health)
-    use progress_bar(
-        x=20, y=120,
-        current=health_points, 
-        max_value=max_health,
-        bar_color="#ef4444",
-        dark_color="#7f1d1d",
-        label="Health",
-        icon_thresholds={
-            0: "images/icon/heart.png",
-            100: "images/icon/heartblack.png"
-        }
-    )
-
-    # Barra Blu (Experience - può essere negativa)
-    use progress_bar_centered(
-        x=20, y=320,
-        current=experience_points, 
-        max_value=max_experience,
-        bar_color="#eeff00",
-        dark_color="#768a1e9c",
-        label="Realation"
-    )
-
-    use money_bar(
-        x=900 , y=20,
-        label="Money",
-        value="1235"
-    )
 
 
 screen money_bar(x , y, label, value):
@@ -456,6 +478,10 @@ screen money_bar(x , y, label, value):
                     xysize (296, 36)
                     background Solid("#0bc93e")
                     padding (4, 4)
+                    hbox:
+                        xalign 0.5
+                        add "images/icon/heart.png"  xsize 30 ysize 30 
+                        add "images/icon/heart.png"  xsize 30 ysize 30 
                     
                        
                 
@@ -498,20 +524,25 @@ screen money_bar(x , y, label, value):
     
 
 # Componente barra standard (valori positivi)
-screen progress_bar(x, y, current, max_value, bar_color, dark_color, label, icon_thresholds=None):
+screen progress_bar(x, y, color_string, current,min_value, max_value, bar_color, dark_color, label, icon_thresholds=None):
+    $ normalized_value = current - min_value  # Es: -50 - (-100) = 50
+    $ normalized_range = max_value - min_value  # Es: 100 - (-100) = 200
+    $ progress_bar_image = "images/gui/progress_" + color_string + ".png"
+    $ circle_image = "images/gui/circle_" +color_string +".png"
+    #$ color_string =
     fixed:
         xpos x
         ypos y
-        xysize (750, 90)
-        
+        xysize (600, 90)       
         
         
         # Container barra (senza spazio)
         frame:
             xpos 45
             ypos 0
-            xysize (655, 90)
-            background Solid("#1a1a1a")
+            xysize (590, 90)
+            #background Solid("#1a1a1a")
+            background None
             padding (0, 0)
             
             vbox:
@@ -521,53 +552,53 @@ screen progress_bar(x, y, current, max_value, bar_color, dark_color, label, icon
                 
                 # Barra superiore (progresso)
                 frame:
-                    xysize (639, 36)
+                    xysize (590, 36)
                     background None
                     padding (0, 0)
                     
                     # Bordo esterno
                     frame:
-                        xysize (639, 36)
+                        xysize (590, 36)
                         background Solid(bar_color)
                         padding (4, 4)
                         
                         # Contenitore barra
                         frame:
-                            xysize (631, 28)
+                            xysize (582, 28)
                             background Solid(dark_color)
                             padding (0, 0)
                             
                             # Barra di progresso
                             bar:
-                                xysize (631, 28)
-                                value current
-                                range max_value
-                                #left_bar Solid(bar_color)
-                                left_bar Frame("images/progress_pink.png", 10, 10)
+                                xysize (582, 28)
+                                value normalized_value
+                                range normalized_range
+                                #left_bar Solid(bar_color)                                
+                                left_bar Frame(progress_bar_image, 10, 10)
                                 right_bar Solid(dark_color)
                                 #at transform:
                                 #    corner1 (14, 14)
                 
                 # Barra inferiore (decorativa scura)
                 frame:
-                    xysize (639, 28)
+                    xysize (590, 28)
                     background Solid("#0a0a0a")
                     padding (4, 4)
                     
                     frame:
-                        xysize (631, 20)
+                        xysize (582, 20)
                         background Solid(dark_color)
                         # Testo CENTRATO sulla barra
 
-            text "[label] [current] / [max_value]":
+            text "[label] score : [current] ":
                 xalign 0.5
                 yalign 1.0
-                size 32
+                size 24
                 color "#ffffff"
                 outlines [(3, "#000000", 0, 0)]
                 bold True
 
-            # Cerchio TONDO con icona
+        # Cerchio TONDO con icona
         frame:
             xpos 0
             ypos 0
@@ -575,23 +606,8 @@ screen progress_bar(x, y, current, max_value, bar_color, dark_color, label, icon
             background None
             padding (0, 0)
             
-            # Bordo esterno chiaro
-        #    add Solid(bar_color):
-        #        xysize (90, 90)
-        #        at transform:
-        #            corner1 (45, 45)
-                
-            # Cerchio interno scuro
-        #    add Solid(dark_color):
-        #        xysize (76, 76)
-        #        xalign 0.5
-        #        yalign 0.5
-        #        at transform:
-        #            corner1 (38, 38)
-            
-            add "images/icon/circle_pink.png":
-                xysize (90,90)
-                
+            add circle_image:
+                xysize (90,90)                
 
             # Icona
             if icon_thresholds:
@@ -603,6 +619,115 @@ screen progress_bar(x, y, current, max_value, bar_color, dark_color, label, icon
                     xysize (50, 50)
             
             
+# Componente barra moderna, sottile e trasparente
+screen progress_bar_slim(color_string, current, min_value, max_value, bar_color, dark_color, label, icon_thresholds=None):
+    $ normalized_value = current - min_value
+    $ normalized_range = max_value - min_value
+    $ progress_bar_image = "images/gui/progress_" + color_string + ".png"
+    $ circle_image = "images/gui/circle_" + color_string + ".png"
+
+    fixed:
+        xysize (445, 50)  # Altezza complessiva ridotta
+
+       
+        frame:
+            xpos 22
+            ypos 0
+            xysize (400, 50)
+            background None
+            padding (0, 0)
+
+        
+            vbox:
+                spacing 0
+                xalign 0.0
+                yalign 0.0
+                text "[label]":
+                    size 12
+                    color bar_color
+                    outlines [(2, "#000000", 0, 0)]
+                    bold True
+                    xalign 0.5
+                    yalign 1.0
+
+                
+
+                # Barra principale sottile
+                frame:
+                    xysize (380, 20)
+                    background Solid("#00000050")  # sfondo semi-trasparente
+                    padding (2, 2)
+
+                    
+                    bar:
+                        xysize (380, 16)
+                        value normalized_value
+                        range normalized_range
+                        left_bar Frame(progress_bar_image, 8, 8)
+                        right_bar Solid(dark_color)
+                    
+                    hbox yalign 0.5 xalign 0.0:
+                        text "     Level:":
+                            size 12
+                            color "#ffffff"
+                            outlines [(2, "#000000", 0, 0)]
+                            bold False
+                            xalign 0.0
+                            yalign 0.5
+                        
+                        text "10 - Tomboy":
+                            size 12
+                            color "#ffffff"
+                            outlines [(2, "#000000", 0, 0)]
+                            bold True
+                            xalign 0.0
+                            yalign 0.5
+
+                    hbox yalign 0.5 xalign 1.0:    
+                        text "Score:":
+                            size 12
+                            color "#ffffff"
+                            outlines [(2, "#000000", 0, 0)]
+                            bold False
+                            xalign 1.0
+                            yalign 0.5
+
+                        text "[current]":
+                            size 12
+                            color "#ffffff"
+                            outlines [(2, "#000000", 0, 0)]
+                            bold True
+                            xalign 1.0
+                            yalign 0.5
+
+            
+                    
+
+               
+              
+                    
+
+        # Cerchio TONDO con icona
+        frame:
+            xpos 0
+            ypos 7
+            xysize (45, 45)
+            background None
+            padding (0, 0)
+            
+            add circle_image:
+                xysize (45,45)                
+
+            # Icona
+            if icon_thresholds:
+                $ icon = get_icon_for_level(current, icon_thresholds)
+                add icon:
+                    xalign 0.5
+                    yalign 0.5
+                    fit "contain"
+                    xysize (25, 25)
+        
+
 
 # Componente barra centrata (per valori negativi)
 screen progress_bar_centered(x, y, current, max_value, bar_color, dark_color, label):
@@ -654,7 +779,10 @@ screen progress_bar_centered(x, y, current, max_value, bar_color, dark_color, la
                                     value max(0, -current)
                                     range max_value
                                     left_bar Solid(dark_color)
-                                    right_bar Solid(bar_color if current < 0 else dark_color)
+                                    if current < 0 :
+                                        right_bar Frame("images/progress_blue.png")
+                                    else :
+                                        right_bar Solid(dark_color)
                                 
                                 # Linea centrale
                                 add Solid("#ffffff"):
@@ -665,48 +793,157 @@ screen progress_bar_centered(x, y, current, max_value, bar_color, dark_color, la
                                     xysize (340, 28)
                                     value max(0, current)
                                     range max_value
-                                    left_bar Solid(bar_color)
+                                    #left_bar Solid(bar_color)
+                                    if current > 0 :
+                                        left_bar Frame("images/progress_blue.png")
+                                    else :
+                                        left_bar Solid(dark_color)
                                     right_bar Solid(dark_color)
                 
                 # Barra inferiore
                 frame:
-                    xysize (345, 28)
+                    xysize (696, 28)
                     background Solid("#0a0a0a")
                     padding (4, 4)
                     
                     frame:
-                        xysize (375, 20)
+                        xysize (688, 20)
                         background Solid(dark_color)
-            
-            # Testo CENTRATO
-            text "[label] [current] / [max_value]":
-                xalign 0.0
+            hbox xfill True:
                 yalign 1.0
-                size 24
-                color "#ffffff"
-                outlines [(3, "#000000", 0, 0)]
-                bold True
+
+                # Testo CENTRATO
+                text "Beta Male":
+                    xalign 0.0
+                    yalign 1.0
+                    size 24
+                    color "#ffffff"
+                    outlines [(3, "#000000", 0, 0)]
+                    bold True
+                            # Cerchio TONDO con icona
+                # Testo CENTRATO
+                text "Alpha Male":
+                    xalign 1.0
+                    yalign 1.0
+                    size 24
+                    color "#ffffff"
+                    outlines [(3, "#000000", 0, 0)]
+                    bold True
                         # Cerchio TONDO con icona
         frame:
-            xpos 330
+            xpos 300
             ypos 0
             xysize (90, 90)
             background None
             padding (0, 0)
             
-            # Bordo esterno chiaro
-            #add Solid(bar_color):
-            #    xysize (90, 90)
-            #    at transform:
-            #        corner1 (45, 45)
+
+            add "images/icon/circle_pink.png":
+                xysize (90,90)
                 
-            # Cerchio interno scuro
-            #add Solid(dark_color):
-            #    xysize (76, 76)
-            #    xalign 0.5
-            #    yalign 0.5
-            #    at transform:
-            #        corner1 (38, 38)
+            # Icona
+            add "images/icon/heartblack.png":
+                xalign 0.5
+                yalign 0.5
+                fit "contain"
+                xysize (50, 50)
+
+
+
+
+                
+# Componente barra centrata (per valori negativi)
+screen progress_bar_icon(x, y, current, max_value, bar_color, dark_color, label):
+    fixed:
+        xpos x
+        ypos y
+        xysize (400, 90)
+
+
+
+        # Container barra PRIMA del cerchio
+        frame:
+            xpos 0
+            ypos 0
+            xysize (400, 90)
+            background Solid("#1a1a1a")
+            padding (0, 0)
+            
+            
+            vbox:
+                spacing 0
+                xalign 0.5
+                yalign 0.5
+                
+                # Barra superiore con CENTRO
+                frame:
+                    xysize (400, 36)
+                    background None
+                    padding (0, 0)
+                    
+                    # Bordo esterno
+                    frame:
+                        xysize (400, 36)
+                        background Solid(bar_color)
+                        padding (4, 4)
+                                            
+                        
+                        hbox:
+                            spacing 0
+                            xalign 0.0                               
+                            add "images/icon/beta.png"  xsize 30 ysize 30 
+                            add "images/icon/beta.png"  xsize 30 ysize 30 
+                            add "images/icon/beta.png"  xsize 30 ysize 30 
+                            add "images/icon/beta.png"  xsize 30 ysize 30 
+                            add "images/icon/beta.png"  xsize 30 ysize 30 
+
+                        hbox:
+                            spacing 0
+                            xalign 1.0                               
+                            add "images/icon/alpha.png"  xsize 30 ysize 30 
+                            add "images/icon/alpha.png"  xsize 30 ysize 30 
+                            add "images/icon/alpha.png"  xsize 30 ysize 30 
+                            add "images/icon/alpha.png"  xsize 30 ysize 30 
+                            add "images/icon/alpha.png"  xsize 30 ysize 30 
+                            
+                               
+                
+                # Barra inferiore
+                frame:
+                    xysize (400, 28)
+                    background Solid("#0a0a0a")
+                    padding (4, 4)
+                    
+                    frame:
+                        xysize (392, 20)
+                        background Solid(dark_color)
+            hbox xfill True:
+                yalign 1.0
+
+                # Testo CENTRATO
+                text "Beta Male":
+                    xalign 0.0
+                    yalign 1.0
+                    size 24
+                    color "#ffffff"
+                    outlines [(3, "#000000", 0, 0)]
+                    bold True
+                            # Cerchio TONDO con icona
+                # Testo CENTRATO
+                text "Alpha Male":
+                    xalign 1.0
+                    yalign 1.0
+                    size 24
+                    color "#ffffff"
+                    outlines [(3, "#000000", 0, 0)]
+                    bold True
+                        # Cerchio TONDO con icona
+        frame:
+            xpos 155
+            ypos 0
+            xysize (90, 90)
+            background None
+            padding (0, 0)
             
 
             add "images/icon/circle_pink.png":
@@ -721,6 +958,81 @@ screen progress_bar_centered(x, y, current, max_value, bar_color, dark_color, la
         
        
 
+screen top_menus():
+
+    # --- TABS ---
+    hbox:
+        spacing 20
+        xpos 20
+        ypos 20
+
+        textbutton "Statistiche" action SetVariable("active_menu", "stats")
+        textbutton "Accessori"  action SetVariable("active_menu", "acc")
+        textbutton "Negozi"     action SetVariable("active_menu", "shop")
+        textbutton "Perks"      action SetVariable("active_menu", "perks")
+        textbutton "Nascondi"   action SetVariable("active_menu", "none")
 
 
-    
+    # --- MENU A COMPARSA ---
+    frame:
+        xysize (1800, 380)
+        xpos 60
+        ypos menu_ypos
+        background "#2228"
+
+        # Contenuto menu
+        vbox:
+            spacing 15
+            xalign 0.5
+            yalign 0.5
+
+            if active_menu == "stats":
+                text "STATISTICHE DISPONIBILI"
+                bar value 0.4 range 1.0
+                bar value 0.7 range 1.0
+
+            elif active_menu == "acc":
+                text "ACCESSORI DISPONIBILI"
+            elif active_menu == "shop":
+                text "NEGOZIO"
+            elif active_menu == "perks":
+                text "PERKS DISPONIBILI"
+
+    # --- ANIMAZIONE ---
+    timer 0.01 action Function(update_menu_anim) repeat True
+
+
+screen menu_accessori():
+    vbox:
+        spacing 20
+        xalign 0.5
+        text "Accessori" size 45
+
+screen menu_stats():
+    vbox:
+        spacing 20
+        xalign 0.5
+        yalign 0.1
+        text "Statistiche" size 45
+
+screen menu_negozi():
+    vbox:
+        spacing 20
+        xalign 0.5
+        text "Negozi" size 45
+
+screen menu_perks():
+    vbox:
+        spacing 20
+        xalign 0.5
+        text "Perks" size 45
+
+
+transform slide_down:
+    yoffset -600
+    linear 0.3 yoffset 0
+
+transform slide_up:
+    yoffset 0
+    linear 0.3 yoffset -600
+
