@@ -6,6 +6,33 @@ init python:
     import time
     import random
 
+    CARD_TOP = "top"
+    CARD_BOTTOM = "bottom"
+
+    TOOL_PLUG   = "plug"
+    TOOL_GAG   = "gag"
+    TOOL_PLUGSET  = "plugset"
+    TOOL_TOY  = "toy"
+    TOOL_DILDO    = "dildo"
+
+    TOOL_VALUES = (
+        TOOL_PLUG,
+        TOOL_GAG,
+        TOOL_PLUGSET,
+        TOOL_TOY,
+        TOOL_DILDO,
+    )
+
+    FACE_MIA_GIRL   = "mia_girl"
+    FACE_MIA_TRANS  = "mia_trans"
+    FACE_RAPIST    = "rapist"
+
+    FACE_VALUES = (
+        FACE_MIA_GIRL,
+        FACE_MIA_TRANS,
+        FACE_RAPIST,
+    )
+
     class DiceRoller:
         def __init__(self):
             self.last_result = 0
@@ -107,11 +134,20 @@ init python:
             return sum(seg[0] for seg in self.segments)
 
     class CardInfo:
-        def __init__(self,name, description,tools,  charapter, stages):
+        def __init__(self, typecard, name, description, tools,  charapter,  position, stages):
+            assert typecard in (CARD_TOP, CARD_BOTTOM), "Invalid card position"
+            assert isinstance(tools, (list, tuple)), "tools must be a list or tuple"
+            assert len(tools) <= 3, "tools can contain max 3 elements"
+            for t in tools:
+                assert t in TOOL_VALUES, "Invalid tool: %r" % t
+            assert charapter in FACE_VALUES, "Invalid face" 
+
             self.name=name
-            self.tools=tools
+            self.tools = list(tools)
             self.description=description
             self.charapter=charapter
+            self.position=position
+            self.typecard=typecard
             self.stages=stages
             self.currentstage=0
             self.is_showing=False

@@ -128,6 +128,65 @@ screen pulsantiera(routine, routine_name):
 
               
 
+screen ultimate_class_card(card_info):
+    if(card_info.position == CARD_BOTTOM):
+        $ card_color= "#d9169f"
+        $ position_color= "#c4cd2c"
+        
+        $ card_type= "Bottom card\n(Be the woman)"
+    else:
+        $ card_color= "#0008ff"
+        $ position_color= "#A51255"
+        $ card_type= "Top card\n(be the man)"
+    modal True
+    frame:    
+        xalign 0.5 yalign 0.1
+        background Frame("card-background.png", 25, 25)
+        #          Frame dice: "30px di bordo su ogni lato!"
+        xsize 607  # Il frame è largo 500px
+        ysize 660  # Il frame è alto 400px
+        padding [25, 25, 25, 25]
+        vbox xsize 556:
+            frame xfill True:
+                style "empty"
+                background card_color
+                has hbox
+                hbox xfill True :
+                    fixed xsize 100 ysize 26 :
+                        add Solid(position_color)
+                        hbox xalign 0.0:
+                            for tool in card_info.tools:
+                                add "tools/[tool].png" xsize 24 ysize 24
+                    fixed xsize 350 ysize 26 :
+                        text  card_info.name bold True  size 24 color "#151515" xalign 0.5 
+                    fixed xsize 100 ysize 26 :
+                        text  card_type bold True size 12 color position_color xalign 0.5 yalign 1.0
+
+
+            
+            frame xfill True:
+                style "empty"
+                background card_color padding (0,0)
+                hbox xfill True: 
+                    add "faces/[card_info.charapter].png"  xsize 100 ysize 100
+                    text card_info.description size 14 xsize 370 color "#f3edeb" yalign 0.5
+                    add "position6.jpg"  xsize 100 ysize 100 xalign 1.0
+                 
+                    
+            add "metronome_anim" xalign 0.5
+
+            frame xfill True yfill True:
+                style "empty"
+                background "#00d9ff" padding (0,0)
+                hbox xfill True:  
+                   
+                    vbox:
+                        text "Stage 1 di 3" size 14 bold True color "#121afa"                         
+                        text "Descrizione completa dello stage . es Lorem ipsum Lorem forgiato est" :
+                            size 14 color "#fa1212" xsize 370 xalign 0.0
+                    use dots_progress( 3, 6)
+                    # Testo stage centrato
+
 
 screen ultimate_card:
     modal True
@@ -175,13 +234,6 @@ screen ultimate_card:
                     # Testo stage centrato
     
 
-    #hbox:
-    #    use gauge_display_vertical
-    #    use circular_countdown(10)
-    #    imagebutton auto "start_%s.png"
-    #    imagebutton auto "stop_%s.png" 
-                    
-                    
 
 
 screen fancy_card:
@@ -246,84 +298,7 @@ screen gauge_display():
         add Transform("lancetta.png", rotate=(player_fuel * 13.5), anchor=(0.5, 0.5)) xpos 100 ypos 95
         text "[player_fuel]" size 20 bold True color "#ecf0f1" xalign 0.5 ypos 110
 
-screen stats_sidebar_narrow():
-    tag stats_screen
-    zorder 100
-    
-    frame:
-        xalign 0.0
-        yalign 0.0
-        xsize 250
-        ysize 1080
-        padding (15, 20)
-        background "#2c3e50e6"
-        
-        vbox:
-            spacing 15
-            
-            text "STATISTICHE" style "stats_title"
-            null height 10
-            
-            hbox:
-                spacing 5
-                text "Nome:" style "stats_label"
-                text "[player_name]" style "stats_value"
-            
-            hbox:
-                spacing 5
-                text "Livello:" style "stats_label"
-                text "[player_level]" style "stats_value"
-            
-            null height 15
-            
-            vbox:
-                spacing 5
-                text "Salute" style "stats_label"
-                hbox:
-                    spacing 10
-                    bar value player_hp range 100 xsize 180 ysize 20
-                    text "[player_hp]/100" style "stats_value_small"
-            
-            vbox:
-                spacing 5
-                text "Energia" style "stats_label"
-                hbox:
-                    spacing 10
-                    bar value player_energy range 100 xsize 180 ysize 20
-                    text "[player_energy]/100" style "stats_value_small"
-            
-            null height 15
-            
-            vbox:
-                spacing 0
-                text "Benzina" style "stats_label"
-                use gauge_display
-            
-            null height 15
-            
-            text "ATTRIBUTI" style "stats_subtitle"
-            
-            hbox:
-                spacing 5
-                text "Forza:" style "stats_label"
-                text "[player_strength]" style "stats_value"
-            
-            hbox:
-                spacing 5
-                text "Intelligenza:" style "stats_label"
-                text "[player_intelligence]" style "stats_value"
-            
-            hbox:
-                spacing 5
-                text "Carisma:" style "stats_label"
-                text "[player_charisma]" style "stats_value"
-            
-            null height 15
-            
-            hbox:
-                spacing 5
-                text "Denaro:" style "stats_label"
-                text "[player_money]$" style "stats_value_gold"
+
 
 
 

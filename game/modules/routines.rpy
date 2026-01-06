@@ -19,6 +19,18 @@ define routine_warmup_fitness = Routine("Warm Up", [
     ("Torso Twists", 20)
 ])
 
-define card_at_the_bar_01 = CardInfo( "Fun at the toilet" , "She invite you to the bathrom ...you notice that... suddenly you begin to ... and dthen...", "dildobig", "cowgirl" "Mia", [
-    ("Fuck for 1 min at 60 bpm", 1 )
-])
+
+#name, description,tools,  charapter, stages, position
+define card_at_the_bar_01 = CardInfo( 
+    typecard=CARD_TOP,
+    name="Fun at the toilet" , 
+    description="She invite you to the bathrom ...you notice that... suddenly you begin to ... and then...", 
+    tools=[TOOL_DILDO, TOOL_GAG],
+    charapter=FACE_MIA_GIRL,
+    position="cowgirl" ,
+    stages=[
+        ("Blow for 10 sec at 60 bpm", 10, 60 ),
+        ("Fuck for 30 sec at 120 bpm", 30, 120 ),
+        ("Cum in a  1 min at 120 bpm", 5, 180 )
+    ]    
+)

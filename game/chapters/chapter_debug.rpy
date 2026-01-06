@@ -156,7 +156,7 @@ label .loop:  # ← Punto di ripartenza
             call countdown_tryout
             jump .loop  # ← Dopo il return, torna al menu!
         "Screen della scheda":
-            call card_tryout            
+            call card_class_tryout            
             jump .loop  # ← Dopo il return, torna al menu!
         "Screen con cornice":
             call frame_tryout
@@ -205,15 +205,25 @@ label countdown_tryout:
     return
 
 
-label card_tryout:
+#label card_tryout:
+    #$ routine_warmup_fitness.start()
+    #$ start_metronome()
+    #scene bg room
+    #window hide
+    #show screen ultimate_card  
+    #"Ti piace ???"
+    #window show
+    #hide screen ultimate_card
+    #return
+
+
+label card_class_tryout:
     #$ routine_warmup_fitness.start()
     #$ start_metronome()
     scene bg room
     window hide
-    show screen fancy_card  
-    "Ti piace ???"
-    window show
-    hide screen fancy_card
+    show screen ultimate_class_card(card_at_the_bar_01)  
+    #how screen ultimate_card
     return
 
 label clock_tryout:
